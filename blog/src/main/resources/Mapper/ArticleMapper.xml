@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dxc.blog.dao.ArticleDao">
+    <resultMap id="resultArticleMap" type="com.dxc.blog.pojo.vo.ArticleVo">
+        <id property="articleId" column="aid"></id>
+        <result property="title" column="title"></result>
+        <result property="viewCount" column="view_count"></result>
+        <result property="classifyId" column="classify_id"></result>
+        <result property="contextSynopsis" column="context_synopsis"></result>
+        <result property="context" column="context"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <collection property="labels" ofType="Label">
+            <id property="labelId" column="lid"></id>
+            <result property="labelName" column="label_name"></result>
+        </collection>
+        <collection property="classify" ofType="Classify">
+            <id property="classId" column="cid"></id>
+            <result property="className" column="class_name"></result>
+        </collection>
+    </resultMap>
+
+    <select id="selectAll" parameterType="Integer" resultMap="resultArticleMap">
+        SELECT a.id aid
+        ,a.title
+        ,a.view_count
+        ,a.classify_id
+        ,a.context_synopsis
+        ,DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') create_time
+        ,DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') update_time
+        ,l.id lid
+        ,l.label_name
+        ,c.id cid
+        ,c.class_name
+        FROM article a
+            LEFT JOIN classify c ON a.classify_id=c.id
+                LEFT JOIN article_label al ON a.id = al.article_id
+                    LEFT JOIN label l ON l.id = al.label_id
+                        <if test="labelId!=null and labelId!=0">
+                            WHERE l.id=#{labelId}
+                        </if>
+                        <if test="classId!=null and classId!=0">
+                            WHERE c.id=#{classId}
+                        </if>
+                        <if test="updateDate!=null and updateDate!=''">
+                            WHERE DATE_FORMAT(a.update_time,'%Y%m')=#{updateDate}
+                        </if>
+                        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="selectArticleById" parameterType="Integer" resultMap="resultArticleMap">
+        SELECT a.id aid
+        ,a.title
+        ,a.view_count
+        ,a.classify_id
+        ,a.context
+        ,DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') create_time
+        ,DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') update_time
+        ,l.id lid
+        ,l.label_name
+        ,c.id cid
+        ,c.class_name
+        FROM article a
+            LEFT JOIN classify c ON a.classify_id=c.id
+                LEFT JOIN article_label al ON a.id = al.article_id
+                    LEFT JOIN label l ON l.id = al.label_id
+                        WHERE a.id=#{id}
+    </select>
+
+    <select id="selecltArticleDateTotal" resultType="ArticleDateResult">
+        SELECT DATE_FORMAT(update_time,'%Y%m') updateDate,COUNT(update_time) articleTotal FROM article
+            GROUP BY updateDate
+                ORDER BY updateDate DESC
+                    LIMIT 0,12
+    </select>
+
+    <insert id="addArticle" parameterType="Article">
+        INSERT INTO article(title
+                            ,classify_id
+                            ,context_synopsis
+                            ,context
+                            ,create_time
+                            ,update_time)
+                            VALUES (#{title}
+                                    ,#{classifyId}
+                                    ,#{contextSynopsis}
+                                    ,#{context}
+                                    ,#{createTime,jdbcType=TIMESTAMP}
+                                    ,#{updateTime,jdbcType=TIMESTAMP});
+    </insert>
+
+    <update id="updateArticle" parameterType="Article">
+        UPDATE article SET
+        <if test="title!=null and title != ''">
+            title = #{title}
+        </if>
+        <if test="classifyId!=null">
+            ,classify_id = #{classifyId}
+        </if>
+        <if test="contextSynopsis!=null and contextSynopsis != ''">
+            ,context_synopsis = #{contextSynopsis}
+        </if>
+        <if test="context!=null and context != ''">
+            ,context = #{context}
+        </if>
+        <if test="updateTime!=null">
+            ,update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="viewCount!=null">
+            view_count = #{viewCount}
+        </if>
+            WHERE id = #{articleId}
+    </update>
+    <delete id="deleteArticle" parameterType="Integer">
+        DELETE FROM article WHERE id = #{articleId}
+    </delete>
+
+</mapper>

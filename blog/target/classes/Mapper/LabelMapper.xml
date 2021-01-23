@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dxc.blog.dao.LabelDao">
+    <select id="selectAll" resultType="LabelResult">
+        SELECT l.*,COUNT(al.article_id) articleTotal FROM label l
+            LEFT JOIN article_label al ON l.id = al.label_id
+                GROUP BY l.id
+    </select>
+    <select id="selectLabelById" parameterType="Integer" resultType="Label">
+        SELECT id labelId,label_name,label_type FROM label WHERE id = #{labelId}
+    </select>
+    <insert id="addLabel" parameterType="Label">
+        INSERT INTO label(label_name,label_type) VALUE (#{labelName},#{labelType})
+    </insert>
+    <update id="updateLabel" parameterType="Label">
+        UPDATE label SET label_name = #{labelName},label_type=#{labelType} WHERE id = #{labelId}
+    </update>
+    <delete id="deleteLabel" parameterType="Integer">
+        DELETE FROM label WHERE id = #{labelId}
+    </delete>
+
+</mapper>

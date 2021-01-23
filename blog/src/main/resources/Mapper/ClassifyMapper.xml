@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dxc.blog.dao.ClassifyDao">
+    <select id="selectAll" resultType="Classify">
+        SELECT id classId,class_name FROM classify
+    </select>
+    <select id="selectClassifyById" parameterType="Integer" resultType="Classify">
+        SELECT id classId,class_name FROM classify WHERE id = #{classId}
+    </select>
+    <insert id="addClassify" parameterType="Classify">
+        INSERT INTO classify VALUE (#{classId},#{className})
+    </insert>
+    <update id="updateClassify" parameterType="Classify">
+        UPDATE classify SET class_name = #{className} WHERE id = #{classId}
+    </update>
+    <delete id="deleteClassify" parameterType="Integer">
+        DELETE FROM classify WHERE id = #{classId}
+    </delete>
+
+
+</mapper>
