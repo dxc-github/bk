@@ -1,6 +1,7 @@
 package com.dxc.blog.controller;
 
 import com.dxc.blog.pojo.Classify;
+import com.dxc.blog.pojo.vo.ClassifyVo;
 import com.dxc.blog.result.ResultBuilder;
 import com.dxc.blog.result.StatusCode;
 import com.dxc.blog.service.ClassifyService;
@@ -28,5 +29,10 @@ public class ClassifyController {
     ResultBuilder<Classify> classifyById(@PathVariable Integer classId){
         Classify classifie = classifyService.selectClassifyById(classId);
         return new ResultBuilder<Classify>(classifie, StatusCode.SUCCESS);
+    }
+    @GetMapping("/list/group")
+    ResultBuilder<List<ClassifyVo>> classifyGroup(){
+        List<ClassifyVo> classifyVos = classifyService.selectGroup();
+        return new ResultBuilder<List<ClassifyVo>>(classifyVos,StatusCode.SUCCESS);
     }
 }
