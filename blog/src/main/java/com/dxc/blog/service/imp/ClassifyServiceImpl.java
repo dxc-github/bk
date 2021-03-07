@@ -2,6 +2,7 @@ package com.dxc.blog.service.imp;
 
 import com.dxc.blog.dao.ClassifyDao;
 import com.dxc.blog.pojo.Classify;
+import com.dxc.blog.pojo.vo.ClassifyVo;
 import com.dxc.blog.service.ClassifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,11 @@ public class ClassifyServiceImpl implements ClassifyService {
     @Override
     public Classify selectClassifyById(Integer id) {
         return classifyDao.selectClassifyById(id);
+    }
+
+    @Override
+    public List<ClassifyVo> selectGroup() {
+        return classifyDao.selectGroup();
     }
 
     @Override
