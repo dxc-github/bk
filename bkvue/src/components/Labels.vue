@@ -29,7 +29,7 @@ export default {
         console.log(data);
         this.labelList = data.result;
       });
-    },
+    }
   },
 };
 </script>
@@ -52,7 +52,7 @@ export default {
   margin: 10px 15px;
   word-wrap: break-word;
   word-break: break-all;
-  span {
+  span{
     text-align: center;
     margin: 5px 3px;
     a,
