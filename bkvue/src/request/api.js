@@ -16,6 +16,9 @@ export const api = {
     getArticleDateTotal:function(){
         return get('/api/article/list/dateTotal')
     },
+    getArticleById:function(id){
+        return get('/api/article/list/'+id)
+    },
     getClassList:function(){
         return get('/api/classify/list')
     },
@@ -24,5 +27,8 @@ export const api = {
     },
     getRecommendList:function(){
         return get('/api/article/list/recommend')
+    },
+    getClassGroup:function(){
+        return get('/api/classify/list/group')
     }
 }
