@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dxc.blog.dao.ClassifyDao">
+    <resultMap id="calssifyResultMap" type="com.dxc.blog.pojo.vo.ClassifyVo">
+        <id property="classId" column="cid"></id>
+        <result property="className" column="class_name"></result>
+        <collection property="articles" ofType="ArticleVo">
+            <id property="articleId" column="aid"></id>
+            <result property="title" column="title"></result>
+            <result property="updateTime" column="update_time"></result>
+        </collection>
+    </resultMap>
     <select id="selectAll" resultType="Classify">
         SELECT id classId,class_name FROM classify
     </select>
     <select id="selectClassifyById" parameterType="Integer" resultType="Classify">
         SELECT id classId,class_name FROM classify WHERE id = #{classId}
+    </select>
+    <select id="selectGroup" resultMap="calssifyResultMap">
+    SELECT c.id cid,
+           c.class_name class_name,
+           a.id aid,
+           a.title,
+           DATE_FORMAT(a.update_time,'%Y/%m/%d') update_time
+           FROM classify c
+            LEFT JOIN (
+                SELECT id,
+                       title,
+                       update_time,
+                       classify_id
+                       FROM article
+                        ORDER BY update_time
+                        DESC LIMIT 0,5
+                        ) a
+                        ON c.id = a.classify_id;
     </select>
     <insert id="addClassify" parameterType="Classify">
         INSERT INTO classify VALUE (#{classId},#{className})
