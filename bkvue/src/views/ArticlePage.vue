@@ -18,7 +18,7 @@
                 </span>
                 <span>
                     <i class="el-icon-collection-tag"></i>
-                    <a href="" v-for="(item,i) in article.label" :key="i">{{ item }} </a>
+                    <a href="" v-for="(item,i) in article.label" :key="i">{{ item.labelName }} </a>
                 </span>
             </div>
             <div class="articlepage-content">
@@ -37,18 +37,32 @@ export default {
     data(){
         return{
             article:{
-                title:"java环境变量配置",
-                editDate:"2021/1/3 22:25:30",
-                views:950,
-                label:[
-                    "java",
-                    "虚拟机"
-                ]
+                title:"",
+                editDate:"",
+                views:0,
+                label:[]
             },
             htmlstr:""
         }
+    },
+    mounted:function(){
+        this.getArticle()
+    },
+    methods:{
+        getArticle:function(){
+            this.$api.getArticleById(this.$route.query.id)
+                .then(
+                    (data)=>{
+                        console.log(data)
+                        this.title=data.result.title
+                        this.editDate=data.result.updateTime
+                        this.views=data.result.viewCount
+                        this.label=data.result.labels
+                        this.htmlstr=data.result.context
+                    }
+                );
+        }
     }
-    
 }
 </script>
 

@@ -6,14 +6,14 @@
     <div class="archivepage-timeline">
       <el-timeline>
         <el-timeline-item
-          :timestamp="item.creatDate"
+          :timestamp="item.updateTime"
           placement="top"
           v-for="(item, i) in articlelist"
           :key="i"
         >
           <el-card>
             <h4>
-              <a href="">{{ item.className }}</a>
+              <a :href="'article?id='+item.articleId">{{ item.title }}</a>
             </h4>
           </el-card>
         </el-timeline-item>
@@ -31,50 +31,20 @@ export default {
   },
   data() {
     return {
-      articlelist: [
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/29",
-        },
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/28",
-        },
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/27",
-        },
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/26",
-        },
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/25",
-        },
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/24",
-        },
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/23",
-        },
-        {
-          title: "linux",
-          className: "Linux Centos6安装php5.6 php7.3多个版本环境",
-          creatDate: "2021/10/22",
-        },
-      ],
+      articlelist: [],
     };
   },
+  mounted:function(){
+    this.getArticleList();
+  },
+  methods:{
+    getArticleList:function(){
+      this.$api.getRecommendList().then(data=>{
+        console.log(data)
+        this.articlelist=data.result.articleVoList
+      })
+    }
+  }
 };
 </script>
 <style lang="less">

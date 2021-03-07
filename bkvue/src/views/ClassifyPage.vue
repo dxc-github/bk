@@ -7,14 +7,14 @@
             <div class="classifypage-class-item" v-for="(item,i) in articlelist" :key="i">
                 <div class="className">
                     <h2>
-                        <a href="#">{{item.className}}</a>
+                        <a :href="'articles?classid='+item.classId">{{item.className}}</a>
                     </h2>
                 </div>
                 <div class="classArticle">
                     <p v-for="(pitem,j) in item.articles" :key="j">
-                        <a href="#">{{pitem.createdate}} {{pitem.articletitle}}</a>
+                        <a :href="'article?id='+pitem.articleId">{{pitem.updateTime}} {{pitem.title}}</a>
                     </p>
-                    <p><a href="#">更多内容...</a></p>
+                    <p><a :href="'articles?classid='+item.classId">更多内容...</a></p>
                 </div>
                 <!-- <el-divider></el-divider> -->
             </div>
@@ -31,82 +31,24 @@ export default {
   data(){
       return {
           articlelist:[
-              {
-                  className:"java",
-                  articles:[
-                      {
-                          articleid:1,
-                          articletitle:"java使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"java使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"java使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"java使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"java使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      }
-                  ]
-              },
-              {
-                  className:"linux",
-                  articles:[
-                      {
-                          articleid:1,
-                          articletitle:"linux使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"linux使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"linux使用Redis集群 封装RedisCluster类",
-                          createdate:"2021/10/29"
-                      }
-                  ]
-              },
-              {
-                  className:"服务器",
-                  articles:[
-                      {
-                          articleid:1,
-                          articletitle:"Linux下svn提交版本 post-commit自动同步到网站目录",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"Linux下svn提交版本 post-commit自动同步到网站目录",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"Linux下svn提交版本 post-commit自动同步到网站目录",
-                          createdate:"2021/10/29"
-                      },
-                      {
-                          articleid:1,
-                          articletitle:"Linux下svn提交版本 post-commit自动同步到网站目录",
-                          createdate:"2021/10/29"
-                      }
-                  ]
+              {     
+                  classId:0,
+                  className:"",
+                  articles:[]
               }
           ]
+      }
+  },
+  mounted:function(){
+      this.getclassgroup()
+  },
+  methods:{
+      getclassgroup:function(){
+          this.$api.getClassGroup()
+          .then((data)=>{
+              this.articlelist=data.result
+              console.log(data)
+          });
       }
   }
     
